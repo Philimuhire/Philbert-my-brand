@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>MY BRAND | PORTFOLIO</title>
+    <link rel="stylesheet" href="/portfolio-page/portfolio.css">
+</head>
+<body>
+    <div id="header"></div>
+
+    <h2 class="title">MY LATEST WORKS</h2>
+    <p class="title-p">Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor 
+        sit amet consectetur adipisicing elit. Rem beatae ipsa illum ut commodi consectetur 
+        laborum nisi! Ut, odio et. Rem beatae ipsa illum ut commodi consectetur laborum nisi! 
+        Ut, odio et.</p>
+
+    <main class="portfolio-content">
+        <div class="portfolio-links">
+            <a href="#" class="filter" data-category="all">Show All</a>
+            <a href="#" class="filter" data-category="ui-ux">UI/UX</a>
+            <a href="#" class="filter" data-category="apps">Apps</a>
+        </div>  
+    </main>  
+    <div class="portfolios">
+        <div class="portfolio calculator" data-category="apps">
+            <p>Calculator</p>
+            <a href="#">Read more</a>
+        </div>
+        <div class="portfolio url-shortener" data-category="apps">
+            <p>Url-shortener</p>
+            <a href="#">Read more</a>
+        </div>
+        <div class="portfolio techme" data-category="ui-ux">
+            <p>TechMe</p>
+            <a href="#">Read more</a>
+        </div>
+    </div> 
+
+    <div id="info"></div>
+
+    <div id="footer"></div>
+    
+    <script src="/dist/bundle.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuIcon = document.getElementById('menuIcon');
+            const navLinks = document.getElementById('navLinks');
+
+            menuIcon.addEventListener('click', function () {
+                navLinks.classList.toggle('show');
+            });
+
+            const filters = document.querySelectorAll('.filter');
+            const portfolios = document.querySelectorAll('.portfolio');
+
+            filters.forEach(filter => {
+                filter.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const category = this.getAttribute('data-category');
+                    filterPortfolios(category);
+                });
+            });
+
+            function filterPortfolios(category) {
+                portfolios.forEach(portfolio => {
+                    if (category === 'all' || portfolio.getAttribute('data-category') === category) {
+                        portfolio.style.display = 'block';
+                    } else {
+                        portfolio.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>MY BRAND | SIGN UP</title>
+    <link rel="stylesheet" href="/sign-up page/signup.css">
+</head>
+<body>
+    <div id="header"></div>
+
+    <main class="signup-container">
+        <form class="signup-form" onsubmit="return registerUser(event)">
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
+            Quod libero tempora quasi officiis numquam eius quas quaerat quidem, inventore nihil.</p>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Email</label>
+                <input type="email" id="email" name="email" required>
+                <span id="emailError" class="error"></span>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <span id="passwordError" class="error"></span>
+            </div>
+            <div class="form-group">
+                <label for="password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+                <span id="confirmPasswordError" class="error"></span>
+            </div>
+            <div class="form-options">
+                <a href="#">Forgot password?</a>
+                <span>Already have an account? <a href="/login-page/login.html">Login</a></span>
+            </div>
+            <button type="submit">Sign Up</button>
+            <div id="successMessage" class="success-message">
+                <div class="success-dialog">
+                  <p>Account created successfully!</p>
+                </div>
+              </div>
+        </form>
+
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="/dist/bundle.js"></script>
+
+    <script>
+        async function registerUser(event) {
+            event.preventDefault();
+        
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+        
+            // Validate email
+            if (!isValidEmail(email)) {
+                document.getElementById('emailError').innerText = 'Please enter a valid email address.';
+                return false;
+            } else {
+                document.getElementById('emailError').innerText = '';
+            }
+        
+            // Validate password
+            if (!isValidPassword(password)) {
+                document.getElementById('passwordError').innerText = 'Password must contain at least one uppercase letter, one lowercase letter, one number, one symbol, and be at least 8 characters long.';
+                return false;
+            } else {
+                document.getElementById('passwordError').innerText = '';
+            }
+        
+            // Confirm password
+            if (password !== confirmPassword) {
+                document.getElementById('confirmPasswordError').innerText = 'Passwords do not match.';
+                return false;
+            } else {
+                document.getElementById('confirmPasswordError').innerText = '';
+            }
+        
+            try {
+                const response = await fetch('http://localhost:5000/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        email: email,
+                        password: password
+                    })
+                });
+        
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('successMessage').innerText = data.message;
+                    document.getElementById('successMessage').style.display = 'block';
+                    // Redirect to login page
+                    window.location.href = '/login-page/login.html';
+                } else {
+                    throw new Error('Registration failed');
+                }
+            } catch (error) {
+                console.error(error);
+                document.getElementById('successMessage').innerText = 'Error: Registration failed';
+            }
+        }
+        
+        function isValidEmail(email) {
+            return email.includes('@') && email.includes('.');
+        }
+        
+        function isValidPassword(password) {
+            return password.length >= 8 &&
+                /[a-z]/.test(password) &&
+                /[A-Z]/.test(password) &&
+                /\d/.test(password) &&
+                /[^a-zA-Z\d\s]/.test(password);
+        }
+    </script>
+</body>
+</html>
